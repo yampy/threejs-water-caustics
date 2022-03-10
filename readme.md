@@ -1,13 +1,11 @@
 # Three.js Water Caustics
 
+## Try it Live!
+[https://yampy.github.io/threejs-water-caustics/](https://yampy.github.io/threejs-water-caustics/)
+
 ## Install
 ```
 npm i
-```
-
-## Build
-```
-npm run build
 ```
 
 ## Run
@@ -15,10 +13,12 @@ npm run build
 npm start
 ```
 
-## Deploy 
+## Build
+```
+npm run build
+```
+
+## Publish
 ```
 npm run deploy
 ```
-
-## URL
-[Guthub Page](https://yampy.github.io/threejs-water-caustics/)

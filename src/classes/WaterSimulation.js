@@ -1,16 +1,15 @@
+import * as THREE from 'three'
 import vertexShader from '../shaders/simulation/vertex.glsl';
 import dropFragmentShader from '../shaders/simulation/drop_fragment.glsl';
 import normalFragmentShader from '../shaders/simulation/normal_fragment.glsl';
 import updateFragmentShader from '../shaders/simulation/update_fragment.glsl';
-import * as THREE from 'three'
 
 class WaterSimulation {
     constructor() {
-        console.log("WaterSimlation Class constructed!");
         this._camera = new THREE.OrthographicCamera(0, 1, 1, 0, 0, 2000);
-        this._geometry = new THREE.PlaneBufferGeometry(3, 3, 400, 400);
-        this._textureA = new THREE.WebGLRenderTarget(512, 512, {type: THREE.FloatType});
-        this._textureB = new THREE.WebGLRenderTarget(512, 512, {type: THREE.FloatType});
+        this._geometry = new THREE.PlaneBufferGeometry(2, 2);
+        this._textureA = new THREE.WebGLRenderTarget(256, 256, {type: THREE.FloatType});
+        this._textureB = new THREE.WebGLRenderTarget(256, 256, {type: THREE.FloatType});
         this.texture = this._textureA;        
         
         const dropMaterial = new THREE.RawShaderMaterial({

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {TrackballControls} from 'three/examples/jsm/controls/TrackballControls'
+import Stats from 'three/examples/jsm/libs/stats.module'
 import 'normalize.css';
 import utils from './shaders/utils.glsl';
 import WaterSimulation from './classes/WaterSimulation';
@@ -8,14 +9,12 @@ import Caustics from './classes/Caustics';
 
 // DOM variables
 const canvas  = document.getElementById('webGLContainer')
-const black = new THREE.Color('black');
-const white = new THREE.Color('white');
 const width = window.innerWidth;
 const height =  window.innerHeight;
 
 // Setup Three.js Scene
-let camera, scene, renderer, controls;
-let uniforms, material, mesh;
+let camera, scene, renderer, controls, stats;
+const black = new THREE.Color('black');
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 const textureLoader = new THREE.TextureLoader();
 
@@ -24,7 +23,7 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 const targetGeometry = new THREE.PlaneBufferGeometry(2, 2);
 for (let index = 0; index < targetGeometry.attributes.position.count; index++) {
-    // Transform plane geometry position from X-Y into X-Z
+    // Transform plane geometry position from X-Y into X-Z    
     let posy = targetGeometry.attributes.position.getY(index);
     targetGeometry.attributes.position.getY(index);
     targetGeometry.attributes.position.setZ(index, -posy);
@@ -45,7 +44,7 @@ const uSky = cubeTextureLoader.load([
         './assets/sky/zpos.jpg',
         './assets/sky/zneg.jpg',
     ]);
-    
+
 function init() {
     // Set utils.glsl to ShaderChunk
     THREE.ShaderChunk['utils'] = utils;
@@ -62,7 +61,7 @@ function init() {
     renderer.autoClear = false;
 
     // Setup Camera
-    camera = new THREE.PerspectiveCamera(50, width / height, 0.001, 100);    
+    camera = new THREE.PerspectiveCamera(30, width / height, 0.01, 100);    
     camera.position.set(0, 4, 0);
     camera.lookAt(0, 0, 0);
 
@@ -84,16 +83,20 @@ function init() {
     window.addEventListener('resize', onResize, false);
     canvas.addEventListener('mousemove', {handleEvent: onMouseMove });
 
-    
     // Add Initial Drops
     for(let i =0;i < 3; i++) {
         waterSimulation.addDrop(
             renderer,
-            Math.random() * 2 - 1, Math.random() * 2 - 1,  // set random position
-            0.05, 
-            (i & 1) ? 0.02: -0.02
+            Math.random() * 2 - 1, Math.random() * 2 - 1,  // Set random position
+            0.05, // Radius
+            (i & 1) ? 0.02: -0.02  // Strength
         );
     }
+
+    // Setup Stats(for Debugging)
+    stats = new Stats();
+    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild(stats.dom)
 }
 
 function onResize(){
@@ -113,7 +116,6 @@ function onMouseMove(event){
     const intersects = raycaster.intersectObject(targetMesh);
 
     for(let intersect of intersects) {
-        console.log("intersect!", intersect);
         waterSimulation.addDrop(
             renderer,
             intersect.point.x,
@@ -125,6 +127,8 @@ function onMouseMove(event){
 }
 
 function render(){
+    stats.begin();
+    
     // Surface water wave simulation
     waterSimulation.stepSimulation(renderer);
     waterSimulation.updateNormals(renderer);
@@ -132,15 +136,21 @@ function render(){
 
     // Caustic simulation using water surface
     caustics.update(renderer, waterTexture)
-    const causticsTexture = caustics.texture.texture;    
+    const causticsTexture = caustics.texture.texture;
+
+    renderer.setRenderTarget(null);
+    renderer.setClearColor(black, 0);
+    renderer.clear();
 
     // Water color 
     water.draw(renderer, waterTexture, causticsTexture, camera);
 
-    renderer.setClearColor( new THREE.Color('black'), 1.0);
     controls.update();
     window.requestAnimationFrame(render);
+
+    stats.end();
 }
 
 init();
 render();
+

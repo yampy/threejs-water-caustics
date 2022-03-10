@@ -4,9 +4,7 @@ import fragmentShader from '../shaders/water/fragment.glsl';
 
 class Water {
     constructor(uLight, uTile, uSky) {
-        console.log("Water Class constructed!");
-        this.geometry = new THREE.PlaneBufferGeometry(2, 2, 800, 800);
-
+        this.geometry = new THREE.PlaneBufferGeometry(2, 2, 200, 200);
         this.material = new THREE.RawShaderMaterial({
             uniforms: {
                 light: { value: uLight},
@@ -26,6 +24,7 @@ class Water {
     draw(renderer, waterTexture, causticsTexture, camera) {
         this.material.uniforms['water'].value = waterTexture;
         this.material.uniforms['causticTex'].value = causticsTexture;
+        
         this.material.side = THREE.FrontSide;
         this.material.uniforms['underwater'].value = true;
         renderer.render(this.mesh, camera);

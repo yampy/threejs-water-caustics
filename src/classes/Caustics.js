@@ -4,10 +4,10 @@ import fragmentShader from '../shaders/caustics/fragment.glsl';
 
 class Caustics {
     constructor(lightFrontGeometry, uLight) {
-        console.log("Caustics Class constructed!");
         this._camera = new THREE.OrthographicCamera(0, 1, 1, 0, 0, 2000);
         this._geometry = lightFrontGeometry;
-        this.texture = new THREE.WebGLRenderTarget(512, 512, {type: THREE.UnsignedByteType});
+        this.texture = new THREE.WebGLRenderTarget(1024, 1024, {type: THREE.UnsignedByteType});
+        this.clearColor = new THREE.Color('black')
 
         const material = new THREE.RawShaderMaterial({
             uniforms: {
@@ -28,10 +28,10 @@ class Caustics {
         this._causticMesh.material.uniforms['water'].value = waterTexture;
 
         renderer.setRenderTarget(this.texture);
-        renderer.render(this._causticMesh, this._camera);
-
-        renderer.setRenderTarget(null);
+        renderer.setClearColor(this.clearColor, 0);
         renderer.clear();
+
+        renderer.render(this._causticMesh, this._camera);
     }
 
 }
