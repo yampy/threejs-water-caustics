@@ -1,7 +1,7 @@
 # Three.js Water Caustics
 
 ## Try it Live!
-[https://yampy.github.io/threejs-water-caustics/](https://yampy.github.io/threejs-water-caustics/)
+[Live demo](https://yampy.github.io/threejs-water-caustics/)
 
 ## Install
 ```
