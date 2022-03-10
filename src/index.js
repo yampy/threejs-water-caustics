@@ -126,7 +126,7 @@ function onMouseMove(event){
     }
 }
 
-function render(){
+function animate(){
     stats.begin();
     
     // Surface water wave simulation
@@ -146,11 +146,10 @@ function render(){
     water.draw(renderer, waterTexture, causticsTexture, camera);
 
     controls.update();
-    window.requestAnimationFrame(render);
-
     stats.end();
+
+    window.requestAnimationFrame(animate);
 }
 
 init();
-render();
-
+window.requestAnimationFrame(animate);
