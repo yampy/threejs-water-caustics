@@ -61,8 +61,8 @@ function init() {
     renderer.autoClear = false;
 
     // Setup Camera
-    camera = new THREE.PerspectiveCamera(30, width / height, 0.01, 100);    
-    camera.position.set(0, 4, 0);
+    camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 5);    
+    camera.position.set(0, 2, 0);
     camera.lookAt(0, 0, 0);
 
     controls = new TrackballControls(
@@ -94,9 +94,9 @@ function init() {
     }
 
     // Setup Stats(for Debugging)
-    stats = new Stats();
-    stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-    document.body.appendChild(stats.dom)
+    // stats = new Stats();
+    // stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+    // document.body.appendChild(stats.dom)
 }
 
 function onResize(){
@@ -127,7 +127,7 @@ function onMouseMove(event){
 }
 
 function animate(){
-    stats.begin();
+    // stats.begin();
     
     // Surface water wave simulation
     waterSimulation.stepSimulation(renderer);
@@ -139,14 +139,14 @@ function animate(){
     const causticsTexture = caustics.texture.texture;
 
     renderer.setRenderTarget(null);
-    renderer.setClearColor(black, 0);
+    renderer.setClearColor(black, 1);
     renderer.clear();
 
     // Water color 
     water.draw(renderer, waterTexture, causticsTexture, camera);
 
     controls.update();
-    stats.end();
+    // stats.end();
 
     window.requestAnimationFrame(animate);
 }

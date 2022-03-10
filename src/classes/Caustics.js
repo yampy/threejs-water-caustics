@@ -28,7 +28,7 @@ class Caustics {
         this._causticMesh.material.uniforms['water'].value = waterTexture;
 
         renderer.setRenderTarget(this.texture);
-        renderer.setClearColor(this.clearColor, 0);
+        renderer.setClearColor(this.clearColor, 1);
         renderer.clear();
 
         renderer.render(this._causticMesh, this._camera);
