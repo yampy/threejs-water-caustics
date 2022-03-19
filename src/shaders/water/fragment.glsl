@@ -14,6 +14,7 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
     if (ray.y < 0.0){
         vec2 t = intersectCube(origin, ray, vec3(-1.0, -poolHeight, -1.0), vec3(1.0, 2.0, 1.0));
         color = getWallColor(origin + ray * t.y);
+        color *= waterColor;
     } else {
         vec2 t = intersectCube(origin, ray, vec3(-1.0, -poolHeight, -1.0), vec3(1.0, 2.0, 1.0));
         vec3 hit = origin + ray * t.y;
@@ -24,18 +25,12 @@ vec3 getSurfaceRayColor(vec3 origin, vec3 ray, vec3 waterColor){
             color += 0.01 * vec3(pow(max(0.0, dot(light, ray)), 20.0)) * vec3(10.0, 8.0, 6.0);
         }
     }
-    if (ray.y < 0.0) color *= waterColor;
     return color;
 }
 
 void main(){
-    vec2 coord = pos.xz * 0.5 + 0.5;
-    vec4 info = texture2D(water, coord);
-
-    // make water look more peaked.
-    for (int i = 0; i < 3; i++){
-        coord += info.ba * 0.005;
-    }
+    vec2 coord = pos.xz * 0.5 + 0.5; 
+    vec4 info = texture2D(water, coord); // water simulation's position
 
     vec3 normal = vec3(info.b, sqrt(1.0 - dot(info.ba, info.ba)), info.a);
     vec3 incomingRay = normalize(pos - eye);

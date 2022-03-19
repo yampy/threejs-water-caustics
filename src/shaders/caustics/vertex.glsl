@@ -28,5 +28,6 @@ void main()	{
     oldPos = project(position.xzy, refractedLight, refractedLight);
     newPos = project(position.xzy + vec3(0.0, info.r, 0.0), ray, refractedLight);
 
-    gl_Position = vec4(0.75 * (newPos.xz + refractedLight.xz / refractedLight.y), 0.0, 1.0);
+    // gl_Position = vec4(0.75 * (newPos.xz + refractedLight.xz / refractedLight.y), 0.0, 1.0);
+    gl_Position = vec4((newPos.xz + refractedLight.xz / refractedLight.y), 0.0, 1.0);
 }

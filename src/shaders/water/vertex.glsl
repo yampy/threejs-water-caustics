@@ -12,7 +12,7 @@ void main(){
     pos = position.xzy;  // X-Z plaine geometry
     pos.y = info.r;  // set water simulation's value
 
-    // set view as varing 'eye' for culculating ray in fragment shader 
+    // set camera view as 'eye' varing for culculating ray in fragment shader 
     vec3 axis_x = vec3(modelViewMatrix[0].x, modelViewMatrix[0].y, modelViewMatrix[0].z);
     vec3 axis_y = vec3(modelViewMatrix[1].x, modelViewMatrix[1].y, modelViewMatrix[1].z);
     vec3 axis_z = vec3(modelViewMatrix[2].x, modelViewMatrix[2].y, modelViewMatrix[2].z);

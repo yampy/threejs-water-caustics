@@ -12,6 +12,13 @@ uniform sampler2D causticTex;
 uniform sampler2D water;
 
 vec2 intersectCube(vec3 origin, vec3 ray, vec3 cubeMin, vec3 cubeMax){
+    float n = 2.0;
+    cubeMin.x = -n;
+    // cubeMin.y = -n;
+    cubeMin.z = -n;
+    cubeMax.x = n;
+    // cubeMax.y = n;
+    cubeMax.z = n;
     vec3 tMin = (cubeMin - origin) / ray;
     vec3 tMax = (cubeMax - origin) / ray;
     vec3 t1 = min(tMin, tMax);

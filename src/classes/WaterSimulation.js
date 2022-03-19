@@ -7,9 +7,9 @@ import updateFragmentShader from '../shaders/simulation/update_fragment.glsl';
 class WaterSimulation {
     constructor() {
         this._camera = new THREE.OrthographicCamera(0, 1, 1, 0, 0, 2000);
-        this._geometry = new THREE.PlaneBufferGeometry(2, 2);
-        this._textureA = new THREE.WebGLRenderTarget(256, 256, {type: THREE.FloatType});
-        this._textureB = new THREE.WebGLRenderTarget(256, 256, {type: THREE.FloatType});
+        this._geometry = new THREE.PlaneBufferGeometry(3, 3, 200, 200);
+        this._textureA = new THREE.WebGLRenderTarget(1024, 1024, {type: THREE.FloatType});
+        this._textureB = new THREE.WebGLRenderTarget(1024, 1024, {type: THREE.FloatType});
         this.texture = this._textureA;        
         
         const dropMaterial = new THREE.RawShaderMaterial({
@@ -23,9 +23,10 @@ class WaterSimulation {
             fragmentShader: dropFragmentShader,
         });
 
+        const speed = 1.05;
         const normalMaterial = new THREE.RawShaderMaterial({
             uniforms: {
-                delta: { value: [1 / 256, 1 / 256] },
+                delta: { value: [speed / 256, speed / 256] },
                 texture: { value: null},
             },
             vertexShader: vertexShader,
@@ -34,7 +35,7 @@ class WaterSimulation {
 
         const updateMaterial = new THREE.RawShaderMaterial({
             uniforms: {
-                delta: { value: [1 / 256, 1 / 256] },
+                delta: { value: [speed / 256, speed / 256] },
                 texture: { value: null},
             },
             vertexShader: vertexShader,

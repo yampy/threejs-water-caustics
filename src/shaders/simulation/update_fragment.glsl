@@ -20,10 +20,10 @@ void main() {
     ) * 0.25;
 
     // change the velocity to move towerd the average
-    info.g += (average - info.r) * 1.8;
+    info.g += (average - info.r) * 2.0;
 
     // attenuate the velocity of the waves
-    info.g *= 0.993;
+    info.g *= 0.987;
 
     // move vertex with velocity
     info.r += info.g;

@@ -6,6 +6,7 @@ import utils from './shaders/utils.glsl';
 import WaterSimulation from './classes/WaterSimulation';
 import Water from './classes/Water';
 import Caustics from './classes/Caustics';
+import Debug from './classes/Debug';
 
 // DOM variables
 const canvas  = document.getElementById('webGLContainer')
@@ -21,7 +22,7 @@ const textureLoader = new THREE.TextureLoader();
 // Setup Raycastering for Intersect calculation
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-const targetGeometry = new THREE.PlaneBufferGeometry(2, 2);
+const targetGeometry = new THREE.PlaneBufferGeometry(4, 4);
 for (let index = 0; index < targetGeometry.attributes.position.count; index++) {
     // Transform plane geometry position from X-Y into X-Z    
     let posy = targetGeometry.attributes.position.getY(index);
@@ -33,8 +34,8 @@ for (let index = 0; index < targetGeometry.attributes.position.count; index++) {
 const targetMesh = new THREE.Mesh(targetGeometry);
 
 // Shader Classes
-let waterSimulation, water, caustics;
-const uLight = [0.3, 0.3, -0.3];
+let waterSimulation, water, caustics, debug;
+const uLight = [0.3, 1.0, -0.3];
 const uTile = textureLoader.load('./assets/tile/tiles.jpg');
 const uSky = cubeTextureLoader.load([
         './assets/sky/xpos.jpg',
@@ -47,7 +48,7 @@ const uSky = cubeTextureLoader.load([
 
 function init() {
     // Set utils.glsl to ShaderChunk
-    THREE.ShaderChunk['utils'] = utils;
+THREE.ShaderChunk['utils'] = utils;
 
     // Setup Renderer
     // Use WebGL1Renderer because of fragment shader for caustics uses GL_OES_standard_derivatives GLSL extention.
@@ -61,8 +62,8 @@ function init() {
     renderer.autoClear = false;
 
     // Setup Camera
-    camera = new THREE.PerspectiveCamera(30, width / height, 0.1, 5);    
-    camera.position.set(0, 2, 0);
+    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 2000);
+    camera.position.set(0, 3, 0);
     camera.lookAt(0, 0, 0);
 
     controls = new TrackballControls(
@@ -78,6 +79,8 @@ function init() {
     waterSimulation = new WaterSimulation();
     water = new Water(uLight, uTile, uSky);
     caustics = new Caustics(water.geometry, uLight);
+    debug = new Debug();
+
 
     // Add Event Listner
     window.addEventListener('resize', onResize, false);
@@ -110,7 +113,6 @@ function onMouseMove(event){
     const rect = canvas.getBoundingClientRect();
     mouse.x = (event.clientX - rect.left) * 2 / width - 1;
     mouse.y = - (event.clientY - rect.top) * 2 / height + 1;
-
     // Calculate intersects and drops
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObject(targetMesh);
@@ -120,7 +122,7 @@ function onMouseMove(event){
             renderer,
             intersect.point.x,
             intersect.point.z,
-            0.10, // radius
+            0.05, // radius
             0.01  // strength
         );
     }
@@ -144,6 +146,10 @@ function animate(){
 
     // Water color 
     water.draw(renderer, waterTexture, causticsTexture, camera);
+
+    // Debug
+    // debug.draw(renderer, waterTexture);
+    // debug.draw(renderer, causticsTexture);
 
     controls.update();
     // stats.end();
