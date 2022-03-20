@@ -22,7 +22,7 @@ const textureLoader = new THREE.TextureLoader();
 // Setup Raycastering for Intersect calculation
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-const targetGeometry = new THREE.PlaneBufferGeometry(4, 4);
+const targetGeometry = new THREE.PlaneBufferGeometry(2, 2);
 for (let index = 0; index < targetGeometry.attributes.position.count; index++) {
     // Transform plane geometry position from X-Y into X-Z    
     let posy = targetGeometry.attributes.position.getY(index);
@@ -62,8 +62,8 @@ THREE.ShaderChunk['utils'] = utils;
     renderer.autoClear = false;
 
     // Setup Camera
-    camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 2000);
-    camera.position.set(0, 3, 0);
+    camera = new THREE.PerspectiveCamera(30, width/height, 0.01, 2000);
+    camera.position.set(0, 2, 0);
     camera.lookAt(0, 0, 0);
 
     controls = new TrackballControls(
