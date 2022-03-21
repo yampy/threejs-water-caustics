@@ -33,10 +33,10 @@ vec3 getWallColor(vec3 point) {
     float scale = 0.8;
     vec3 wallColor;
     vec3 normal;
-    if (abs(point.x) > 0.999) {
+    if (abs(point.x) > 1.999) {
         wallColor = texture2D(tiles, point.yz * 0.5 + vec2(1.0, 0.5)).rgb;
         normal = vec3(-point.x, 0.0, 0.0);
-    } else if (abs(point.z) > 0.999) {
+    } else if (abs(point.z) > 1.999) {
         wallColor = texture2D(tiles, point.yx * 0.5 + vec2(1.0, 0.5)).rgb;
         normal = vec3(0.0, 0.0, -point.z);
     } else {
