@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import 'normalize.css';
 import utils from './shaders/utils.glsl';
@@ -64,9 +63,7 @@ THREE.ShaderChunk['utils'] = utils;
     // Setup Camera
     camera = new THREE.PerspectiveCamera(30, width/height, 0.01, 2000);
     camera.position.set(0, 2, 0);
-    controls = new OrbitControls(
-        camera, canvas
-    );
+    camera.lookAt(0, 0, 0);
 
     // Setup Scene
     scene = new THREE.Scene();
@@ -147,7 +144,6 @@ function animate(){
     // debug.draw(renderer, waterTexture);
     // debug.draw(renderer, causticsTexture);
 
-    controls.update();
     // stats.end();
 
     window.requestAnimationFrame(animate);
